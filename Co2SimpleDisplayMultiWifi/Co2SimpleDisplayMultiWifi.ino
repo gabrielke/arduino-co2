@@ -1,5 +1,6 @@
 
 #include <ESP8266WiFi.h>
+#include <ESP8266WiFiMulti.h>
 #include <WiFiClient.h>
 
 #include <Wire.h>
@@ -85,6 +86,10 @@ void setup() {
 
   connected = false;
 
+  WiFi.mode(WIFI_STA);
+  wifiMulti.addAP("GabrielNet", "access248");
+  wifiMulti.addAP("Ixenit", "Petnehazi52");
+
   // Connect to WiFi network
   display.println();
   display.print("Connecting to ");
@@ -102,13 +107,11 @@ void setup() {
 
   display.println(WiFi.localIP());
   display.display();
+
 }
 
 void loop() {
-  
-  unsigned long t1,t2;
-  
-  t1 = millis();
+
   int ppm = readCO2();
   timeClient.update();
 
@@ -117,13 +120,7 @@ void loop() {
   display.setCursor(0,0);
   display.print("ppm: ");
   display.println(ppm);
-  display.println(timeClient.getFormattedTime());
-  display.setTextSize(1);
-  display.println(WiFi.localIP());
-
-  t2 = millis();
-  display.print("run: "); display.print(t2-t1); display.println("ms");
+  display.print(timeClient.getFormattedTime());
   display.display();
-  delay(500);
-  
+  delay(1000);
 }
